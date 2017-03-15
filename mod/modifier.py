@@ -5,14 +5,12 @@ sys.path.append('.')
 
 
 from tkinter import *
-from tkinter.filedialog import askopenfilename
-from tkinter.messagebox import askyesno
 from tkinter.simpledialog import askstring
 from mytk3 import TextWall
 from graph3 import Deckart3, Line3, Point3, Modifier, BasicPoint3, bust
 from myparser import parser
 import openpyxl as xls
-from xlstest import write_to_xls
+from xlstest import write_to_xls, create_or_rewrite
 
 
 BEGIN = '1.0'
@@ -268,23 +266,26 @@ class DataPlotter:
             print(file=f)
 
     def f_save_to_xls(self):
-        name = askopenfilename()
+        name = askstring(title='Open', prompt='Enter the file name:')
         if not name:
             return None
-        if os.path.exists(name):
-            print('File is already exist.')
-            answer = askyesno('File is already exist.', 'Rewrite?')
-            if not answer:
-                return self.f_save_to_xls()
 
         if '.xlsx' not in name:
             name += '.xlsx'
 
-        wb = xls.load_workbook(name)
+        if os.path.exists(name):
+            wb = xls.load_workbook(name)
+        else:
+            wb = xls.Workbook()
+
         sheets = wb.sheetnames
         if 'Sheet' in sheets:
             wb.remove_sheet(wb.get_sheet_by_name('Sheet'))
-        sheetname = askstring(title='New sheet', prompt='Enter the sheet name')
+
+        sheetname = create_or_rewrite(wb)
+        if not sheetname:
+            return None
+
         write_to_xls(wb,
                      sheetname,
                      *self.begin,
