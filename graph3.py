@@ -552,9 +552,9 @@ class Modifier:
                                  color='#eea500',
                                  width=3,
                                  smooth=1)
-            self.newline.replace()
+            self.newline.replace()      # Сперва перерисовываем линию
 
-            self.replace()
+            self.replace()              # Затем точки
 
     def replace(self):
         for p in self.points:
@@ -619,6 +619,8 @@ class Modifier:
         self.newline = None
         for p in self.points:
             p.delete(not_rm=True)
+
+        self.points = []
 
         self.master.canvas.unbind('<Button-1>')
         self.master.canvas.unbind('<ButtonRelease-1>')

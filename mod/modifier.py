@@ -24,18 +24,22 @@ class Mod(Modifier):
         if not self.line:
             return None
         else:
-            fp = self.line.points[0]
-            lp = self.line.points[-1]
-            start = Point3.create_from_point(fp,
-                                             parent=fp,
-                                             storage=self.points,
-                                             **kwargs)
-            print('!!!!!!!!!!!!!!1points', id(self.points), id(self.master.points))
-            stop = Point3.create_from_point(lp,
-                                            parent=lp,
-                                            storage=self.points,
-                                            **kwargs)
-            print('points!!!!!!!!!!!!!', self.points)
+            if not self.points:
+                fp = self.line.points[0]
+                lp = self.line.points[-1]
+                Point3.create_from_point(fp,
+                                         parent=fp,
+                                         storage=self.points,
+                                         **kwargs)
+                print('!!!!!!!!!!!!!!1points', id(self.points), id(self.master.points))
+                Point3.create_from_point(lp,
+                                         parent=lp,
+                                         storage=self.points,
+                                         **kwargs)
+                print('points!!!!!!!!!!!!!', self.points)
+            else:
+                for p in self.points:
+                    p.switch()
             self.newline = Line3(self.master,
                                  self.points,
                                  color='#eea500',
@@ -88,7 +92,15 @@ class Mod(Modifier):
         self.master.canvas.bind('<Button-3>', self.rm_point)
 
     def stop(self):
-        pass
+        self.line = None
+        self.newline.delete()
+        self.newline = None
+        for p in self.points:
+            p.switch()
+        self.replace()
+
+        self.master.canvas.unbind('<Button-1>')
+        self.master.canvas.unbind('<ButtonRelease-1>')
 
 
 class Container:
