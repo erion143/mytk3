@@ -48,10 +48,10 @@ class Mod(Modifier):
             self.replace()
 
     def add_point(self, event, **kwargs):
-        p = Point3.create_from_abs_coord(self.master,
-                                         event.x, event.y,
-                                         storage=self.points,
-                                         **kwargs)
+        Point3.create_from_abs_coord(self.master,
+                                     event.x, event.y,
+                                     storage=self.points,
+                                     **kwargs)
 
         self.points.sort(key=(lambda p: p.x))
 
@@ -200,7 +200,7 @@ class DataPlotter:
         self.canvas.grid_forget()
         self.button_frame.grid_forget()
 
-    def size(self, event):
+    def size(self, event=None):
         print(self.canvas.winfo_width(), self.canvas.winfo_height())
         print(self.canvas.winfo_reqwidth(), self.canvas.winfo_reqheight())
 
