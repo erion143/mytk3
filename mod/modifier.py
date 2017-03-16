@@ -87,6 +87,9 @@ class Mod(Modifier):
         self.master.canvas.bind('<Double-Button-1>', self.add_point)
         self.master.canvas.bind('<Button-3>', self.rm_point)
 
+    def stop(self):
+        pass
+
 
 class Container:
     def __init__(self):
@@ -225,6 +228,7 @@ class DataPlotter:
         self.plot.modifier.accept(self.origin)
         self.plot.modifier.fill()
         self.plot.modifier.run()
+        print('in modifier\'s points storage contains {}'.format(self.plot.modifier.points))
 
     def f_cancel(self):
         self.plot.modifier.stop()

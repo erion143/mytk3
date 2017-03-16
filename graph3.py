@@ -619,7 +619,6 @@ class Modifier:
         self.newline = None
         for p in self.points:
             p.delete(not_rm=True)
-        self.points = []
 
         self.master.canvas.unbind('<Button-1>')
         self.master.canvas.unbind('<ButtonRelease-1>')
