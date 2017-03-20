@@ -671,6 +671,9 @@ class BasicPoint3:
         if flag != 2:
             self.get_abs_coords()
 
+    def is_basic(self):
+        return True
+
 
 class Point3(BasicPoint3):
     def __init__(self, master, x, y, abs_=None,
@@ -758,6 +761,9 @@ class Point3(BasicPoint3):
     def __repr__(self):
         s = "Point ({}, {})".format(self.x, self.y)
         return s
+
+    def is_basic(self):
+        return False
 
 
 class Line3:
