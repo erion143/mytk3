@@ -113,5 +113,6 @@ class Container:
             self.root.bind('<Control-o>', self.pre_accept_points)
 
 
-Container().mainloop()
+if __name__ == '__main__':
+    Container().mainloop()
 
