@@ -50,8 +50,8 @@ class Container:
         self.e_number.pack()
         self.e_error.pack()
         self.canvas.pack()
-        self.tl = None
-        self.text = None
+        self.input = TextWindow(self.root)
+        self.weights = TextWindow(self.root)
         self.root.bind('<Control-o>', self.pre_accept_points)
         self.active = False
 
@@ -59,25 +59,14 @@ class Container:
         self.root.mainloop()
 
     def pre_accept_points(self, event=None):
-        self.tl = Toplevel(self.root)
-        self.text = TextWall(self.tl)
-        self.text.pack()
-        self.tl.bind('<Control-r>', self.accept_points)
+        self.input.spawn()
+        self.input.window.bind('<Control-r>', self.accept_points)
         self.root.unbind('<Control-o>')
 
     def accept_points(self, event=None):
-        data = self.text.get(start_index='1.0', end_index=END)
-        print(data)
-        xs, ys = parser(data.split('\n'),
-                        (float, float),
-                        source_is_file=False,
-                        loglevel='DEBUG')
-        print(xs, ys)
+        xs, ys = self.input.get()
         self.plot.add_group_of_points(xs, ys)
-        self.tl.unbind('<Control-r>')
-        self.tl.destroy()
-        self.text = None
-        self.tl = None
+        self.input.despawn()
         self.active = True
         self.root.bind('<Control-s>', self.try_spline)
 
@@ -113,6 +102,63 @@ class Container:
             self.root.bind('<Control-o>', self.pre_accept_points)
 
 
+class TextWindow:
+    separator = '\t'
+    pattern = (float, float)
+
+    def __init__(self, master):
+        self.master = master
+        self.rows = []
+
+        self.window = None
+        self.text = None
+        self.bind_pattern = ''
+        self.master.bind('<q>', self.spawn)
+
+    def mainloop(self):
+        self.master.mainloop()
+
+    def spawn(self, event=None):
+        self.window = Toplevel(self.master)
+        self.text = TextWall(self.window)
+        self.text.pack()
+
+        for row in self.rows:
+            self.text.insert(END, row + '\n')
+
+        self.window.protocol('WM_DELETE_WINDOW', self.despawn)
+        self.master.unbind('<q>')
+
+    def accept(self, event=None):
+        if self.text is not None:
+            self.rows = [i for i in self.text.get('1.0', END).split('\n') if i]
+
+        print(self.rows)
+
+    def despawn(self):
+        self.accept()
+        self.window.destroy()
+        self.window = None
+        self.text = None
+        self.master.bind('<q>', self.spawn)
+
+    def get(self, event=None):
+        self.accept()
+        data = parser(self.rows,
+                      self.pattern,
+                      separator=self.separator,
+                      source_is_file=False)
+        print(data)
+        return data
+
+
+def test_():
+    root = Tk()
+    tw = TextWindow(root)
+    tw.mainloop()
+
+
 if __name__ == '__main__':
-    Container().mainloop()
+    # Container().mainloop()
+    test_()
 
