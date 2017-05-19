@@ -113,12 +113,12 @@ class Container:
         self.active.grid()
         self.disable = self.c_plot = DataPlotter(self)
 
-        self.root.bind('<Control-q>', self.switch)
-        self.root.bind('<Control-a>', self.c_plot.size)
-        self.root.bind('<Control-w>', self.c_input.f_go)
-        self.root.bind('<Control-m>', self.c_plot.modify)
-        self.root.bind('<Control-s>', self.c_plot.save)
-        self.root.bind('<Control-l>', self.c_plot.show_level)
+        # self.root.bind('<Control-q>', self.switch)
+        # self.root.bind('<Control-a>', self.c_plot.size)
+        # self.root.bind('<Control-w>', self.c_input.f_go)
+        # self.root.bind('<Control-m>', self.c_plot.modify)
+        # self.root.bind('<Control-s>', self.c_plot.save)
+        # self.root.bind('<Control-l>', self.c_plot.show_level)
 
     def switch(self, event=None):
         print('switch')

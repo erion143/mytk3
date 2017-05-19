@@ -46,6 +46,7 @@ class Container:
         self.actual = None  # Для сплайна
 
         self.pre_accept_points()
+        self.root.bind('<Control-o>', self.pre_accept_points)
 
     def mainloop(self):
         self.root.mainloop()
@@ -54,9 +55,9 @@ class Container:
         self.input.spawn()
         self.input.command = self.accept_points
         self.input.ready()
-        self.root.unbind('<Control-o>')
 
     def accept_points(self, event=None):
+        self.clear()
         xs, ys = self.input.get()
 
         self.plot.add_group_of_points(xs, ys)
@@ -135,7 +136,6 @@ class Container:
                 point.delete()
             for line in self.plot.lines[:]:
                 line.delete()
-            self.root.bind('<Control-o>', self.pre_accept_points)
 
     def ask_weight(self, event=None):
         self.weights.spawn()
